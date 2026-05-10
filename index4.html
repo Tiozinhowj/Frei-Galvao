@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Santo Antônio de Sant'Anna Galvão</title>
+    
+    <!-- Tailwind CSS para Estilização Responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        // Configuração de cores do Tailwind
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        franciscan: {
+                            light: '#DCD3C6',
+                            DEFAULT: '#8B5A2B',
+                            dark: '#5A3A1B',
+                            bg: '#F9F6F0'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Lora', 'serif'],
+                        sans: ['Lato', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F9F6F0;
+            color: #3C3530;
+            overflow-x: hidden;
+        }
+        
+        /* Animações gerais */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Animação do Dropdown Menu Mobile */
+        .menu-slide {
+            transform-origin: top;
+            animation: slideDown 0.3s ease-out forwards;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: scaleY(0.95); }
+            to { opacity: 1; transform: scaleY(1); }
+        }
+        
+        /* Efeito Parallax simples no Header */
+        .hero-bg {
+            background-image: linear-gradient(rgba(45, 42, 38, 0.7), rgba(45, 42, 38, 0.8)), url('https://images.unsplash.com/photo-1548625361-16dc4d75d506?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Estilos da Linha do Tempo (Scroll Horizontal para Desktop) */
+        .timeline-container {
+            scrollbar-width: thin;
+            scrollbar-color: #8B5A2B #EFECE6;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        .timeline-container::-webkit-scrollbar {
+            height: 12px;
+        }
+        .timeline-container::-webkit-scrollbar-track {
+            background: #EFECE6;
+            border-radius: 10px;
+        }
+        .timeline-container::-webkit-scrollbar-thumb {
+            background-color: #8B5A2B;
+            border-radius: 10px;
+        }
+
+        /* Estilos das Abas de Desktop (Tracinho embaixo da ativa) */
+        .nav-tab-desktop {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .nav-tab-desktop.active {
+            color: #8B5A2B;
+            font-weight: 700;
+        }
+        .nav-tab-desktop.active::after {
+            content: '';
+            position: absolute;
+            bottom: -22px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #8B5A2B;
+        }
+        
+        /* Transições de botões */
+        .lang-btn { transition: all 0.3s ease; }
+    </style>
+</head>
+<body class="font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- Header & Navegação -->
+    <nav class="bg-white shadow-md sticky top-0 z-50 relative">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2 text-franciscan font-serif font-bold text-xl">
+                    <img src="Tau2.png" alt="Tau Franciscano" class="h-8 w-auto drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]">
+                    <span>Frei Galvão</span>
+                </div>
+
+                <!-- MENU DESKTOP: Abas de Navegação -->
+                <div class="hidden md:flex space-x-8 text-sm font-serif uppercase tracking-wider text-gray-500">
+                    <button onclick="switchView('home')" class="nav-tab nav-tab-home nav-tab-desktop active hover:text-franciscan-dark" data-type="desktop" data-i18n="tabHome">Início</button>
+                    <button onclick="switchView('timeline')" class="nav-tab nav-tab-timeline nav-tab-desktop hover:text-franciscan-dark" data-type="desktop" data-i18n="tabTimeline">Cronologia</button>
+                    <button onclick="switchView('miracle')" class="nav-tab nav-tab-miracle nav-tab-desktop hover:text-franciscan-dark" data-type="desktop" data-i18n="tabMiracle">Milagre</button>
+                </div>
+
+                <!-- MENU DESKTOP: Idiomas -->
+                <div class="hidden md:flex space-x-2">
+                    <button onclick="changeLanguage('pt')" class="lang-btn lang-btn-pt lang-btn-desktop active px-3 py-1 rounded border border-franciscan bg-franciscan text-white text-sm font-medium focus:outline-none" data-type="desktop">PT</button>
+                    <button onclick="changeLanguage('en')" class="lang-btn lang-btn-en lang-btn-desktop px-3 py-1 rounded border border-gray-300 text-sm font-medium hover:bg-gray-100 focus:outline-none" data-type="desktop">EN</button>
+                    <button onclick="changeLanguage('it')" class="lang-btn lang-btn-it lang-btn-desktop px-3 py-1 rounded border border-gray-300 text-sm font-medium hover:bg-gray-100 focus:outline-none" data-type="desktop">IT</button>
+                    <button onclick="changeLanguage('es')" class="lang-btn lang-btn-es lang-btn-desktop px-3 py-1 rounded border border-gray-300 text-sm font-medium hover:bg-gray-100 focus:outline-none" data-type="desktop">ES</button>
+                </div>
+
+                <!-- Botão Menu Hambúrguer (Apenas Mobile) -->
+                <button onclick="toggleMenu()" id="menu-btn" class="md:hidden text-franciscan-dark hover:text-franciscan focus:outline-none p-2 transition-colors">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- MENU MOBILE: Dropdown (Apenas Mobile) -->
+        <div id="mobile-menu" class="hidden md:hidden absolute w-full left-0 top-16 bg-white border-t border-gray-100 shadow-2xl z-40 menu-slide">
+            <div class="px-4 py-6 flex flex-col gap-8">
+                
+                <!-- Mobile: Abas de Navegação -->
+                <div class="flex flex-col w-full space-y-2">
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2" data-i18n="menuNavTitle">Menu de Navegação</p>
+                    <button onclick="switchView('home'); toggleMenu()" class="nav-tab nav-tab-home nav-tab-mobile active text-left py-3 px-4 rounded-r-lg transition-all font-serif uppercase tracking-wider text-sm border-l-4 border-franciscan bg-franciscan-light/20 text-franciscan-dark font-bold" data-type="mobile" data-i18n="tabHome">Início</button>
+                    <button onclick="switchView('timeline'); toggleMenu()" class="nav-tab nav-tab-timeline nav-tab-mobile text-left py-3 px-4 rounded-r-lg hover:bg-gray-50 transition-all font-serif uppercase tracking-wider text-sm border-l-4 border-transparent text-gray-500" data-type="mobile" data-i18n="tabTimeline">Cronologia</button>
+                    <button onclick="switchView('miracle'); toggleMenu()" class="nav-tab nav-tab-miracle nav-tab-mobile text-left py-3 px-4 rounded-r-lg hover:bg-gray-50 transition-all font-serif uppercase tracking-wider text-sm border-l-4 border-transparent text-gray-500" data-type="mobile" data-i18n="tabMiracle">Milagre</button>
+                </div>
+                
+                <!-- Mobile: Idiomas -->
+                <div class="flex flex-col w-full">
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4" data-i18n="menuLangTitle">Idioma / Language</p>
+                    <div class="grid grid-cols-4 gap-2">
+                        <button onclick="changeLanguage('pt'); toggleMenu()" class="lang-btn lang-btn-pt lang-btn-mobile active py-3 rounded-xl border border-franciscan bg-franciscan-light/20 text-sm font-bold focus:outline-none flex flex-col items-center justify-center gap-1 shadow-sm" data-type="mobile"><span class="text-xl">🇧🇷</span> PT</button>
+                        <button onclick="changeLanguage('en'); toggleMenu()" class="lang-btn lang-btn-en lang-btn-mobile py-3 rounded-xl border border-gray-200 text-sm font-bold hover:bg-gray-50 focus:outline-none flex flex-col items-center justify-center gap-1 shadow-sm" data-type="mobile"><span class="text-xl">🇺🇸</span> EN</button>
+                        <button onclick="changeLanguage('it'); toggleMenu()" class="lang-btn lang-btn-it lang-btn-mobile py-3 rounded-xl border border-gray-200 text-sm font-bold hover:bg-gray-50 focus:outline-none flex flex-col items-center justify-center gap-1 shadow-sm" data-type="mobile"><span class="text-xl">🇮🇹</span> IT</button>
+                        <button onclick="changeLanguage('es'); toggleMenu()" class="lang-btn lang-btn-es lang-btn-mobile py-3 rounded-xl border border-gray-200 text-sm font-bold hover:bg-gray-50 focus:outline-none flex flex-col items-center justify-center gap-1 shadow-sm" data-type="mobile"><span class="text-xl">🇪🇸</span> ES</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile: Botão Fechar Menu -->
+            <div class="bg-gray-50 p-4 text-center border-t border-gray-100">
+                <button onclick="toggleMenu()" class="text-sm font-bold text-gray-500 uppercase tracking-wider w-full h-full py-2" data-i18n="menuCloseBtn"><i class="fa-solid fa-chevron-up mr-2"></i> Fechar Menu</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header / Hero Section -->
+    <header class="hero-bg text-white py-20 md:py-32 text-center px-4">
+        <h1 class="font-serif text-4xl md:text-6xl font-bold mb-4" data-i18n="heroTitle">Santo Antônio de Sant'Anna Galvão</h1>
+        <p class="text-xl md:text-2xl font-serif italic mb-6 text-gray-200" data-i18n="heroSubtitle">“Ternura-Doçura de Deus”</p>
+        <div class="inline-flex flex-col md:flex-row items-center justify-center gap-4 text-sm md:text-base bg-black/40 px-6 py-3 rounded-full backdrop-blur-sm border border-white/20">
+            <span><i class="fa-solid fa-star text-franciscan-light mr-2"></i>1739 – Guaratinguetá/SP</span>
+            <span class="hidden md:inline text-gray-400">|</span>
+            <span><i class="fa-solid fa-cross text-franciscan-light mr-2"></i>23/12/1822 – São Paulo/SP</span>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow w-full relative z-0">
+
+        <!-- ================= VIEW: HOME ================= -->
+        <div id="view-home" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20 block fade-in">
+            <!-- Seção: Modelo de Vida -->
+            <section class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="order-2 md:order-1">
+                    <div class="aspect-[3/4] rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-200 relative">
+                        <!-- Imagem gerada do Frei Galvão -->
+                        <img src="FreiGalvao.png" alt="Estátua de Santo Antônio de Sant'Anna Galvão" class="object-cover w-full h-full" onerror="this.src='https://placehold.co/600x800/EFECE6/8B5A2B?text=Frei+Galvão'">
+                    </div>
+                </div>
+                <div class="order-1 md:order-2 space-y-6">
+                    <div class="inline-block px-4 py-1 rounded-full bg-franciscan-light/30 text-franciscan-dark font-semibold text-sm tracking-wider uppercase" data-i18n="tagModel">Modelo de Vida</div>
+                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-franciscan-dark" data-i18n="titleModel">Santo da Paz e da Caridade</h2>
+                    <h3 class="text-xl text-gray-600 font-serif italic" data-i18n="subtitleModel">Padroeiro da Construção Civil</h3>
+                    
+                    <div class="prose prose-lg text-gray-700 leading-relaxed space-y-4" data-i18n="textModel">
+                        <p>Frei Galvão foi um grande devoto de Maria Santíssima, a quem se consagrou aos 27 anos de idade, assinando com o próprio sangue o documento de consagração.</p>
+                        <p>O primeiro santo brasileiro pertenceu à Província Franciscana da Imaculada Conceição do Brasil, mesmo grupo de frades do Seminário Franciscano Frei Galvão.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção: Pílulas e Novena -->
+            <section class="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-franciscan-light/50 relative overflow-hidden">
+                <i class="fa-solid fa-hands-praying absolute -bottom-10 -right-10 text-[200px] text-franciscan-bg opacity-50 z-0"></i>
+                
+                <div class="relative z-10 grid md:grid-cols-2 gap-12">
+                    <!-- Pílulas -->
+                    <div class="space-y-6">
+                        <div class="w-12 h-12 bg-franciscan text-white rounded-full flex items-center justify-center text-xl mb-4 shadow-lg">
+                            <i class="fa-solid fa-capsules"></i>
+                        </div>
+                        <h2 class="text-2xl md:text-3xl font-serif font-bold text-franciscan-dark" data-i18n="titlePills">Pílulas Devocionais</h2>
+                        <div class="text-gray-700 space-y-4 leading-relaxed" data-i18n="textPills">
+                            <p>Inspirados pelos atos de amor e caridade de Santo Antônio de Sant'Anna Galvão sobretudo, para com os doentes, damos continuação à produção e distribuição das Pílulas Devocionais às pessoas que nos procuram em momento de aflição.</p>
+                            <p>Por meio deste sacramental (Pílulas), Frei Galvão demonstra sua compaixão pelos enfermos; objeto devocional de fé, é representado por um papelzinho, dobrado em forma de pílula e com uma frase em honra à Imaculada Conceição:</p>
+                            <blockquote class="border-l-4 border-franciscan pl-4 italic text-gray-600 font-serif bg-gray-50 p-4 rounded-r-lg shadow-inner">
+                                "Depois do parto, ó Virgem, permaneceste intacta. Mãe de Deus, intercede por nós".
+                            </blockquote>
+                            <div class="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm font-semibold flex items-start gap-3">
+                                <i class="fa-solid fa-triangle-exclamation mt-1"></i>
+                                <p>As Pílulas de Frei Galvão não são remédios químicos, mas Pílulas Devocionais que não dispensam a ida ao médico!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Oração -->
+                    <div class="space-y-6">
+                        <div class="w-12 h-12 bg-franciscan text-white rounded-full flex items-center justify-center text-xl mb-4 shadow-lg">
+                            <i class="fa-solid fa-book-bible"></i>
+                        </div>
+                        <h2 class="text-2xl md:text-3xl font-serif font-bold text-franciscan-dark" data-i18n="titlePrayer">Oração da Novena</h2>
+                        <div class="text-gray-700 space-y-4 leading-relaxed" data-i18n="textPrayer">
+                            <p>Deus de amor, fonte de todas as luzes, que cumulastes de bênçãos o vosso Santo Antônio de Sant'Anna Galvão, nós vos adoramos, glorificamos e vos agradecemos, porque nele fizestes maravilhas.</p>
+                             <p>Ele, Senhor, por vossa inspiração, criou para o vosso povo sofrido esta Pílula, sinal da compaixão para com os enfermos e sinal seguro da mediação da Virgem Maria Imaculada.</p>
+                             <p>Alcançai-nos, pela intercessão de Vossa Mãe e de Santo Antônio de Sant'Anna Galvão, que nós, ao tomarmos com fé e devoção estas pílulas, consigamos a graça desejada <strong>(pedir a graça)</strong>.</p>
+                             <p>Ó Santo Antônio de Sant'Anna Galvão, junto à Maria, Mãe de Deus, rogai por nós, para que obtenhamos do Pai Celeste a vida plena no amor do Espírito Santo. Amém!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção: Como Receber e Doações -->
+            <section class="grid md:grid-cols-2 gap-8">
+                <!-- Como Receber -->
+                <div class="bg-franciscan-bg p-8 rounded-2xl border border-franciscan-light">
+                    <h3 class="text-2xl font-serif font-bold text-franciscan-dark mb-6 flex items-center gap-3" data-i18n="titleReceive">
+                        <i class="fa-solid fa-envelope-open-text text-franciscan"></i> Para receber as Pílulas
+                    </h3>
+                    <div class="text-gray-700 space-y-4" data-i18n="textReceive">
+                        <p>Envie-nos uma carta contendo dentro um envelope selado com a carta comercial 1º porte, que enviaremos de volta com as Pílulas.</p>
+                              <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 mt-4">
+                                  <p class="font-bold text-franciscan-dark">Seminário Franciscano Frei Galvão</p>
+                                  <p>Av. José Pereira da Cruz, 53<br>Jardim do Vale<br>Guaratinguetá/SP – CEP 12519-411</p>
+                              </div>
+                              <p class="text-red-600 font-bold mt-4 uppercase text-sm"><i class="fa-solid fa-ban mr-1"></i> Proibida a venda das Pílulas Devocionais.</p>
+                    </div>
+                </div>
+
+                <!-- Doações -->
+                <div class="bg-franciscan text-white p-8 rounded-2xl shadow-lg relative overflow-hidden">
+                    <i class="fa-solid fa-heart absolute -right-4 -top-4 text-9xl text-white/10"></i>
+                    <div class="relative z-10">
+                        <h3 class="text-2xl font-serif font-bold mb-4 flex items-center gap-3" data-i18n="titleDonate">
+                            <i class="fa-solid fa-hand-holding-dollar"></i> Ajude-nos
+                        </h3>
+                        <p class="mb-6 opacity-90" data-i18n="textDonate">Envie sua contribuição espontânea e ajude na formação dos futuros franciscanos e no acolhimento aos devotos de Frei Galvão!</p>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/20">
+                                <p class="font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-building-columns"></i> Contas Bancárias</p>
+                                <ul class="space-y-2 text-sm opacity-90">
+                                    <li><strong>Bradesco:</strong> Agência 0415-4 | C/C 16.704-5</li>
+                                    <li><strong>CEF:</strong> Agência 3475-4 | Op. 003 | C/C 1274-9</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/20">
+                                <p class="font-bold mb-1 flex items-center gap-2"><i class="fa-brands fa-pix"></i> Chave PIX (CNPJ)</p>
+                                <p class="text-lg font-mono">62.340.203/0018-22</p>
+                                <p class="text-xs mt-2 opacity-80 uppercase tracking-wider">Favorecida: Província da Imaculada Conceição do Brasil</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= VIEW: TIMELINE ================= -->
+        <div id="view-timeline" class="hidden w-full fade-in pb-20">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+                <h2 class="text-3xl md:text-5xl font-serif font-bold text-franciscan-dark mb-4" data-i18n="timelineMainTitle">Cronologia de Vida e Obra</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto" data-i18n="timelineSubtitle">Os principais marcos da história do primeiro santo brasileiro, desde o seu nascimento até a Canonização.</p>
+            </div>
+
+            <!-- Container Renderizado via JS com Width Ajustado -->
+            <div id="timeline-render-container" class="w-full bg-white py-16 border-y border-gray-200 shadow-inner">
+                <!-- Conteúdo injetado via JavaScript -->
+            </div>
+        </div>
+
+        <!-- ================= VIEW: MIRACLE ================= -->
+        <div id="view-miracle" class="hidden w-full fade-in pb-20">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="text-center mb-12">
+                    <span class="inline-block px-4 py-1 rounded-full bg-franciscan-light/30 text-franciscan-dark font-semibold text-sm tracking-wider uppercase mb-4">
+                        <i class="fa-solid fa-star text-franciscan mr-2"></i> <span data-i18n="miracleTag">O Milagre</span>
+                    </span>
+                    <h2 class="text-3xl md:text-5xl font-serif font-bold text-franciscan-dark mb-4" data-i18n="miracleMainTitle">O Milagre da Canonização</h2>
+                    <p class="text-lg text-gray-600 font-serif italic" data-i18n="miracleSubtitle">O relato surpreendente e cientificamente inexplicável que elevou Frei Galvão aos altares.</p>
+                </div>
+
+                <div class="bg-white rounded-3xl p-8 md:p-12 shadow-md border border-franciscan-light/50 relative overflow-hidden">
+                    <i class="fa-solid fa-baby absolute -top-4 -right-4 text-[150px] text-franciscan-bg opacity-40 z-0"></i>
+                    
+                    <div class="relative z-10 prose prose-lg text-gray-700 leading-relaxed max-w-none space-y-6" data-i18n="miracleContent">
+                        <p>Entre <strong>1993 e 1994</strong>, Sandra Grossi de Almeida, de São Paulo (Capital), sofreu três abortos espontâneos devido ao "útero bicorne": um útero com cavidades de dimensões muito pequenas e assimétricas. Esta malformação, que não pode ser corrigida cirurgicamente, impossibilitava levar qualquer gravidez ao seu final, pois o feto não tinha espaço suficiente para crescimento e formação.</p>
+                        
+                        <p>Em <strong>maio de 1999</strong>, Sandra ficou novamente grávida. Em agosto, a sua ginecologista fez uma "cerclagem cervical" preventiva, numa tentativa de evitar um novo aborto, já que a gravidez era de altíssimo risco. Sandra estava consciente de que um novo aborto, um parto prematuro ou uma forte hemorragia poderiam levá-la à morte. Os médicos aconselharam-na a interromper a gravidez ou, no máximo, levá-la apenas até o quinto mês, quando o bebê seria retirado prematuramente.</p>
+                        
+                        <blockquote class="border-l-4 border-franciscan pl-6 italic text-gray-600 font-serif bg-franciscan-bg p-6 rounded-r-lg my-8">
+                            Entretanto, mesmo diante de um quadro tão grave, Sandra não desistiu. Durante toda a gravidez, ela e sua família invocaram Frei Galvão, com muitas orações e novenas contínuas.
+                        </blockquote>
+                        
+                        <p>Autorizada pelos médicos, ela tomou as <strong>"Pílulas de Frei Galvão"</strong>, com muita fé e a certeza de que o então "homem da Paz e da Caridade" iria interceder por ela e permitir o nascimento desse filho tão almejado.</p>
+                        
+                        <p>A gestação evoluiu normalmente até a trigésima segunda semana. Por ser de altíssimo risco, a parturiente fez repouso absoluto durante os meses seguintes, sendo inclusive internada para acompanhamento diário. No dia <strong>11/12/1999</strong>, com a ruptura da bolsa, os médicos optaram pelo parto por cesariana, que ocorreu sem nenhuma complicação.</p>
+                        
+                        <div class="bg-green-50 border border-green-200 p-6 rounded-xl my-6">
+                            <h4 class="text-green-800 font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-heart-pulse"></i> Um fato inexplicável</h4>
+                            <p class="text-green-900 m-0">Assim, com quase dois quilos e 42 centímetros, nasceu Enzo de Almeida Galafassi. Embora tenha apresentado um gravíssimo caso de deficiência respiratória, precisando ficar entubado por cerca de 24 horas, recebeu alta no dia <strong>19/12/1999</strong>.</p>
+                        </div>
+                        
+                        <p>O fato desta gestação (de alto risco e sem esperança por parte dos médicos) ter chegado ao final com sucesso foi atribuído à intercessão de Santo Antônio de Sant'Anna Galvão. Tido como um fato cientificamente inexplicável no seu conjunto, segundo os atuais conhecimentos, foi considerado como <strong>miraculoso, por unanimidade</strong>, pelo "Congresso de Teólogos".</p>
+                        
+                        <p>No dia <strong>16/12/2006</strong>, o Papa Bento XVI autorizou a Congregação das Causas dos Santos a promulgar o Decreto a respeito do milagre. Atualmente, Sandra e Enzo residem em Brasília, DF.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Moderno -->
+    <footer class="bg-franciscan-dark text-white pt-16 pb-8 mt-auto relative z-10 overflow-hidden">
+        <!-- Ícone decorativo de fundo -->
+        <i class="fa-solid fa-cross absolute -right-10 -bottom-10 text-[250px] text-black opacity-5 pointer-events-none"></i>
+        
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+                
+                <!-- Coluna 1: Logo e Saudação -->
+                <div class="flex flex-col items-center md:items-start text-center md:text-left space-y-6">
+                    <div class="flex items-center gap-3 font-serif font-bold text-2xl text-franciscan-light">
+                        <img src="Tau2.png" alt="Tau Franciscano" class="h-10 w-auto filter invert grayscale opacity-90 drop-shadow-md">
+                        <span>Frei Galvão</span>
+                    </div>
+                    <p class="font-serif italic text-2xl text-gray-300" data-i18n="pazEBem">Paz e Bem!</p>
+                </div>
+
+                <!-- Coluna 2: Links Oficiais -->
+                <div class="flex flex-col items-center md:items-start text-center md:text-left">
+                    <h4 class="font-bold text-franciscan-light uppercase tracking-wider text-sm mb-6 relative inline-block after:content-[''] after:absolute after:-bottom-2 after:left-1/2 md:after:left-0 after:-translate-x-1/2 md:after:translate-x-0 after:w-8 after:h-1 after:bg-franciscan-light after:rounded-full" data-i18n="footerLinksTitle">Links Oficiais</h4>
+                    <ul class="space-y-4 text-sm text-gray-300">
+                        <li>
+                            <a href="https://www.vatican.va/news_services/liturgy/saints/ns_lit_doc_20070511_frei-galvao_po.html" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-all duration-300 flex items-center gap-3 group hover:translate-x-1">
+                                <span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-franciscan transition-colors"><i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></span>
+                                <span data-i18n="linkVatican">Frei Galvão no Vaticano</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://ofm.org/home.html" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-all duration-300 flex items-center gap-3 group hover:translate-x-1">
+                                <span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-franciscan transition-colors"><i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></span>
+                                <span data-i18n="linkOFM">Ordem dos Frades Menores (OFM)</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://franciscanos.org.br/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-all duration-300 flex items-center gap-3 group hover:translate-x-1">
+                                <span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-franciscan transition-colors"><i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></span>
+                                <span data-i18n="linkProvince">Província da Imaculada Conceição</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Coluna 3: Localização e Redes -->
+                <div class="flex flex-col items-center md:items-start text-center md:text-left">
+                    <h4 class="font-bold text-franciscan-light uppercase tracking-wider text-sm mb-6 relative inline-block after:content-[''] after:absolute after:-bottom-2 after:left-1/2 md:after:left-0 after:-translate-x-1/2 md:after:translate-x-0 after:w-8 after:h-1 after:bg-franciscan-light after:rounded-full" data-i18n="footerSanctuaryTitle">Santuário de Frei Galvão</h4>
+                    <p class="text-sm text-gray-300 leading-relaxed mb-6" data-i18n="footerAddress">
+                        Av. José Pereira da Cruz, 53<br>
+                        Jardim do Vale<br>
+                        Guaratinguetá/SP - 12519-411
+                    </p>
+                    <div class="flex gap-3">
+                        <a href="https://www.facebook.com/SantuarioFreiGalvao/?ref=NONE_xav_ig_profile_page_web#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-franciscan hover:-translate-y-1 transition-all duration-300 shadow-md">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.instagram.com/santuariofreigalvao/" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-franciscan hover:-translate-y-1 transition-all duration-300 shadow-md">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@TVFreiGalv%C3%A3o" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-franciscan hover:-translate-y-1 transition-all duration-300 shadow-md">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                        <a href="https://www.santuariofreigalvao.com" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-franciscan hover:-translate-y-1 transition-all duration-300 shadow-md" title="Website">
+                            <i class="fa-solid fa-globe"></i>
+                        </a>
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- Direitos de Autor e Créditos -->
+            <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400">
+                <p data-i18n="footerText">Seminário Franciscano Frei Galvão &copy; 2026</p>
+                <p data-i18n="footerDev">Desenvolvido com <i class="fa-solid fa-heart text-franciscan mx-1"></i> e devoção</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- DADOS DA CRONOLOGIA E LÓGICA -->
+    <script>
+        // Lógica do Menu Hambúrguer (Mobile)
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.querySelector('#menu-btn i');
+            
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                menu.classList.add('hidden');
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        // DADOS BRUTOS DA CRONOLOGIA TRADUZIDOS
+        const timelineData = [
+            {
+                category: { pt: "Vida antes da vida religiosa", en: "Life before religious life", it: "Vita prima della vita religiosa", es: "Vida antes de la vida religiosa" },
+                events: [
+                    { year: "1739", pt: "Nasce em Guaratinguetá - SP, Antônio Galvão de França, futuro Santo Antônio de Sant'Ana Galvão.", en: "Antônio Galvão de França, the future Saint Anthony of Saint Ann Galvão, is born in Guaratinguetá - SP.", it: "Nasce a Guaratinguetá - SP, Antônio Galvão de França, futuro Sant'Antonio di Sant'Anna Galvão.", es: "Nace en Guaratinguetá - SP, Antônio Galvão de França, futuro San Antonio de Santa Ana Galvão." },
+                    { year: "1752", pt: "Ingressa no Seminário de Belém da Cachoeira, mantido pelos Jesuítas na Bahia, com 13 anos.", en: "Enters the Seminary of Belém da Cachoeira, maintained by the Jesuits in Bahia, at age 13.", it: "Entra nel Seminario di Belém da Cachoeira, mantenuto dai Gesuiti a Bahia, all'età di 13 anni.", es: "Ingresa al Seminario de Belém da Cachoeira, mantenido por los Jesuitas en Bahía, a los 13 años." },
+                    { year: "1755", pt: "Morre a sua mãe, Dona Isabel Leite de Barros.", en: "His mother, Dona Isabel Leite de Barros, dies.", it: "Muore sua madre, Dona Isabel Leite di Barros.", es: "Muere su madre, Doña Isabel Leite de Barros." },
+                    { year: "1757", pt: "O jovem seminarista regressa a Guaratinguetá, permanecendo 2 anos com a família. (Jesuítas seriam expulsos do Brasil).", en: "The young seminarian returns to Guaratinguetá, staying 2 years with his family. (Jesuits would be expelled from Brazil).", it: "Il giovane seminarista torna a Guaratinguetá, rimanendo 2 anni con la famiglia. (I Gesuiti sarebbero stati espulsi dal Brasile).", es: "El joven seminarista regresa a Guaratinguetá, permaneciendo 2 años con la familia. (Los jesuitas serían expulsados de Brasil)." }
+                ]
+            },
+            {
+                category: { pt: "Entrada na Vida Religiosa", en: "Entry into Religious Life", it: "Ingresso nella Vita Religiosa", es: "Entrada en la Vida Religiosa" },
+                events: [
+                    { year: "1760", pt: "(15 abr) Ingressa na Ordem de São Francisco, recebe o hábito e inicia o Noviciado em Macacu (RJ).", en: "(Apr 15) Enters the Order of St. Francis, receives the habit and begins the Novitiate in Macacu (RJ).", it: "(15 apr) Entra nell'Ordine di San Francesco, riceve l'abito e inizia il Noviziato a Macacu (RJ).", es: "(15 abr) Ingresa a la Orden de San Francisco, recibe el hábito e inicia el Noviciado en Macacu (RJ)." }
+                ]
+            },
+            {
+                category: { pt: "Votos Perpétuos", en: "Perpetual Vows", it: "Voti Perpetui", es: "Votos Perpetuos" },
+                events: [
+                    { year: "1761", pt: "(16 abr) Faz Profissão Solene e jura dar a vida para defender o privilégio da Imaculada Conceição.", en: "(Apr 16) Makes Solemn Profession and swears to give his life to defend the privilege of the Immaculate Conception.", it: "(16 apr) Emette la Professione Solenne e giura di dare la vita per difendere il privilegio dell'Immacolata Concezione.", es: "(16 abr) Hace Profesión Solemne y jura dar la vida para defender el privilegio de la Inmaculada Concepción." },
+                    { year: "1762", pt: "(11 jul) É ordenado Sacerdote no Rio de Janeiro e celebra sua Primeira Missa em Guaratinguetá.", en: "(Jul 11) Is ordained a Priest in Rio de Janeiro and celebrates his First Mass in Guaratinguetá.", it: "(11 lug) Viene ordinato Sacerdote a Rio de Janeiro e celebra la sua Prima Messa a Guaratinguetá.", es: "(11 jul) Es ordenado Sacerdote en Río de Janeiro y celebra su Primera Misa en Guaratinguetá." },
+                    { year: "1762", pt: "(24 jul) Transferido para o Convento de São Francisco, em São Paulo, continua seus estudos.", en: "(Jul 24) Transferred to the Convent of St. Francis in São Paulo, continues his studies.", it: "(24 lug) Trasferito al Convento di San Francesco a San Paolo, continua i suoi studi.", es: "(24 jul) Transferido al Convento de San Francisco en São Paulo, continúa sus estudios." }
+                ]
+            },
+            {
+                category: { pt: "Consagração à Nossa Senhora", en: "Consecration to Our Lady", it: "Consacrazione alla Madonna", es: "Consagración a Nuestra Señora" },
+                events: [
+                    { year: "1766", pt: "(9 nov) Com 27 anos, consagra-se escravo de Nossa Senhora, assinando com sangue o Documento.", en: "(Nov 9) At 27, consecrates himself as a slave of Our Lady, signing the Document with blood.", it: "(9 nov) A 27 anni si consacra schiavo della Madonna, firmando il Documento col sangue.", es: "(9 nov) Con 27 años, se consagra esclavo de Nuestra Señora, firmando con sangre el Documento." },
+                    { year: "1768", pt: "(23 jul) Concluídos os estudos, é nomeado Confessor, Pregador e Porteiro do Convento São Francisco.", en: "(Jul 23) Having concluded his studies, is appointed Confessor, Preacher and Porter of the St. Francis Convent.", it: "(23 lug) Conclusi gli studi, è nominato Confessore, Predicatore e Portinaio del Convento di San Francesco.", es: "(23 jul) Concluidos los estudios, es nombrado Confesor, Predicador y Portero del Convento de San Francisco." },
+                    { year: "1769", pt: "É nomeado Confessor do Recolhimento Santa Teresa, onde conhece a Irmã Helena Maria.", en: "Is appointed Confessor of the Santa Teresa Retreat, where he meets Sister Helena Maria.", it: "Viene nominato Confessore del Ritiro Santa Teresa, dove incontra Suor Helena Maria.", es: "Es nombrado Confesor del Recogimiento Santa Teresa, donde conoce a la Hermana Helena Maria." },
+                    { year: "1770", pt: "(30 jun) Falece o pai de Frei Galvão.", en: "(Jun 30) Friar Galvão's father passes away.", it: "(30 giu) Muore il padre di Fra Galvão.", es: "(30 jun) Fallece el padre de Fray Galvão." },
+                    { year: "1770", pt: "(25 ago) Participa da fundação da primeira Academia de Letras de São Paulo.", en: "(Aug 25) Participates in the foundation of the first Academy of Letters of São Paulo.", it: "(25 ago) Partecipa alla fondazione della prima Accademia di Lettere di San Paolo.", es: "(25 ago) Participa de la fundación de la primera Academia de Letras de São Paulo." }
+                ]
+            },
+            {
+                category: { pt: "Mosteiro da Luz", en: "Monastery of Light", it: "Monastero della Luce", es: "Monasterio de la Luz" },
+                events: [
+                    { year: "1774", pt: "(2 fev) Funda, com a Madre Helena, o Recolhimento da Luz (futuro Mosteiro).", en: "(Feb 2) Founds, with Mother Helena, the Retreat of Light (future Monastery).", it: "(2 feb) Fonda, con Madre Helena, il Ritiro della Luce (futuro Monastero).", es: "(2 feb) Funda, con la Madre Helena, el Recogimiento de la Luz (futuro Monasterio)." },
+                    { year: "1775", pt: "(29 jun) O Governador Martim Lopes decreta o fechamento do Recolhimento.", en: "(Jun 29) Governor Martim Lopes decrees the closure of the Retreat.", it: "(29 giu) Il Governatore Martim Lopes decreta la chiusura del Ritiro.", es: "(29 jun) El Gobernador Martim Lopes decreta el cierre del Recogimiento." },
+                    { year: "1775", pt: "(Ago) O Recolhimento é reaberto. Frei Galvão é nomeado Comissário da Ordem Terceira.", en: "(Aug) The Retreat is reopened. Friar Galvão is appointed Commissary of the Third Order.", it: "(Ago) Il Ritiro viene riaperto. Fra Galvão è nominato Commissario del Terz'Ordine.", es: "(Ago) El Recogimiento es reabierto. Fray Galvão es nombrado Comisario de la Orden Tercera." },
+                    { year: "1775", pt: "(23 set) Morre a Madre Helena do Espírito Santo.", en: "(Sep 23) Mother Helena do Espírito Santo dies.", it: "(23 set) Muore Madre Helena do Espírito Santo.", es: "(23 sep) Muere la Madre Helena do Espírito Santo." },
+                    { year: "1777", pt: "É nomeado Visitador do Convento São Luiz de Tolosa, de Itu.", en: "Is appointed Visitor of the São Luiz de Tolosa Convent in Itu.", it: "Viene nominato Visitatore del Convento São Luiz de Tolosa di Itu.", es: "Es nombrado Visitador del Convento São Luiz de Tolosa, de Itu." },
+                    { year: "1780", pt: "É condenado ao desterro no RJ pelo Governador, mas a população exige e consegue seu retorno a SP em triunfo.", en: "Is condemned to exile in RJ by the Governor, but the population demands and achieves his triumphant return to SP.", it: "Viene condannato all'esilio a RJ dal Governatore, ma la popolazione esige ed ottiene il suo ritorno a SP in trionfo.", es: "Es condenado al destierro en RJ por el Gobernador, pero la población exige y logra su retorno a SP en triunfo." },
+                    { year: "1788", pt: "(25 mar) As Religiosas da Luz transferem-se para o novo edifício construído por Frei Galvão.", en: "(Mar 25) The Sisters of Light transfer to the new building built by Friar Galvão.", it: "(25 mar) Le Religiose della Luce si trasferiscono nel nuovo edificio costruito da Fra Galvão.", es: "(25 mar) Las Religiosas de la Luz se transfieren al nuevo edificio construido por Fray Galvão." },
+                    { year: "1798", pt: "(24 mar) É eleito Guardião superior do Convento de São Francisco na capital paulista.", en: "(Mar 24) Is elected superior Guardian of the St. Francis Convent in the capital.", it: "(24 mar) Viene eletto Guardiano superiore del Convento di San Francesco nella capitale.", es: "(24 mar) Es elegido Guardián superior del Convento de San Francisco en la capital paulista." },
+                    { year: "1802", pt: "(15 ago) Depois de 28 anos de esforços, é inaugurado e abençoado o Recolhimento da Luz.", en: "(Aug 15) After 28 years of effort, the Retreat of Light is inaugurated and blessed.", it: "(15 ago) Dopo 28 anni di sforzi, viene inaugurato e benedetto il Ritiro della Luce.", es: "(15 ago) Después de 28 años de esfuerzos, es inaugurado y bendecido el Recogimiento de la Luz." }
+                ]
+            },
+            {
+                category: { pt: "Problemas de Saúde e Falecimento", en: "Health Problems and Passing", it: "Problemi di Salute e Decesso", es: "Problemas de Salud y Fallecimiento" },
+                events: [
+                    { year: "1807", pt: "Nomeado Visitador Geral e Presidente do Capítulo Provincial, renuncia por motivos de saúde.", en: "Appointed General Visitor and President of the Provincial Chapter, resigns due to health reasons.", it: "Nominato Visitatore Generale e Presidente del Capitolo Provinciale, rinuncia per motivi di salute.", es: "Nombrado Visitador General y Presidente del Capítulo Provincial, renuncia por motivos de salud." },
+                    { year: "1808", pt: "Vai em Missão a Piraí do Sul, onde deixa uma estampa de Maria (origem do Santuário das Brotas).", en: "Goes on a Mission to Piraí do Sul, where he leaves a picture of Mary (origin of the Brotas Sanctuary).", it: "Va in Missione a Piraí do Sul, dove lascia un'immagine di Maria (origine del Santuario delle Brotas).", es: "Va en Misión a Piraí do Sul, donde deja una estampa de María (origen del Santuario de las Brotas)." },
+                    { year: "1811", pt: "(25 ago) Funda em Sorocaba o Recolhimento de Santa Clara.", en: "(Aug 25) Founds the Retreat of Santa Clara in Sorocaba.", it: "(25 ago) Fonda a Sorocaba il Ritiro di Santa Clara.", es: "(25 ago) Funda en Sorocaba el Recogimiento de Santa Clara." },
+                    { year: "1819", pt: "Por graves problemas de saúde, passa a residir na Luz com autorização do Bispo.", en: "Due to severe health problems, begins to reside at the Light Monastery with the Bishop's authorization.", it: "A causa di gravi problemi di salute, va a risiedere alla Luce con l'autorizzazione del Vescovo.", es: "Por graves problemas de salud, pasa a residir en la Luz con autorización del Obispo." },
+                    { year: "1822", pt: "(23 dez) Morre aos 83 anos de idade e é sepultado no Mosteiro da Luz.", en: "(Dec 23) Dies at 83 years of age and is buried in the Monastery of Light.", it: "(23 dic) Muore a 83 anni e viene sepolto nel Monastero della Luce.", es: "(23 dic) Muere a los 83 años de edad y es sepultado en el Monasterio de la Luz." }
+                ]
+            },
+            {
+                category: { pt: "Até a Canonização", en: "Until Canonization", it: "Fino alla Canonizzazione", es: "Hasta la Canonización" },
+                events: [
+                    { year: "1928", pt: "Primeira biografia escrita por Madre Oliva Maria de Jesus.", en: "First biography written by Mother Oliva Maria de Jesus.", it: "Prima biografia scritta da Madre Oliva Maria de Jesus.", es: "Primera biografía escrita por la Madre Oliva Maria de Jesus." },
+                    { year: "1938", pt: "(5 jun) Início do Primeiro processo de Beatificação de Frei Galvão.", en: "(Jun 5) Beginning of the First Beatification process of Friar Galvão.", it: "(5 giu) Inizio del Primo processo di Beatificazione di Fra Galvão.", es: "(5 jun) Inicio del Primer proceso de Beatificación de Fray Galvão." },
+                    { year: "1996", pt: "Frei Galvão é declarado Venerável.", en: "Friar Galvão is declared Venerable.", it: "Fra Galvão è dichiarato Venerabile.", es: "Fray Galvão es declarado Venerable." },
+                    { year: "1998", pt: "(25 out) Solene Beatificação na Praça de São Pedro, pelo Papa João Paulo II.", en: "(Oct 25) Solemn Beatification in St. Peter's Square, by Pope John Paul II.", it: "(25 ott) Solenne Beatificazione in Piazza San Pietro, ad opera di Papa Giovanni Paolo II.", es: "(25 oct) Solemne Beatificación en la Plaza de San Pedro, por el Papa Juan Pablo II." },
+                    { year: "2007", pt: "(11 mai) Canonização de Santo Antônio de Sant'Anna Galvão em São Paulo, pelo Papa Bento XVI.", en: "(May 11) Canonization of Saint Anthony of Saint Ann Galvão in São Paulo, by Pope Benedict XVI.", it: "(11 mag) Canonizzazione di Sant'Antonio di Sant'Anna Galvão a San Paolo, da parte di Papa Benedetto XVI.", es: "(11 may) Canonización de San Antonio de Santa Ana Galvão en São Paulo, por el Papa Benedicto XVI." }
+                ]
+            }
+        ];
+
+        // VARIÁVEIS DE ESTADO
+        let currentLang = 'pt';
+        let currentView = 'home';
+
+        // TRADUÇÕES ESTÁTICAS DO SITE
+        const translations = {
+            pt: {
+                tabHome: "Início",
+                tabTimeline: "Cronologia",
+                tabMiracle: "Milagre",
+                menuNavTitle: "Menu de Navegação",
+                menuLangTitle: "Idioma / Language",
+                menuCloseBtn: '<i class="fa-solid fa-chevron-up mr-2"></i> Fechar Menu',
+                heroTitle: "Santo Antônio de Sant'Anna Galvão",
+                heroSubtitle: "“Ternura-Doçura de Deus”",
+                tagModel: "Modelo de Vida",
+                titleModel: "Santo da Paz e da Caridade",
+                subtitleModel: "Padroeiro da Construção Civil",
+                textModel: `<p>Frei Galvão foi um grande devoto de Maria Santíssima, a quem se consagrou aos 27 anos de idade, assinando com o próprio sangue o documento de consagração.</p>
+                            <p>O primeiro santo brasileiro pertenceu à Província Franciscana da Imaculada Conceição do Brasil, mesmo grupo de frades do Seminário Franciscano Frei Galvão.</p>`,
+                titlePills: "Pílulas Devocionais",
+                textPills: `<p>Inspirados pelos atos de amor e caridade de Santo Antônio de Sant'Anna Galvão sobretudo, para com os doentes, damos continuação à produção e distribuição das Pílulas Devocionais às pessoas que nos procuram em momento de aflição.</p>
+                            <p>Por meio deste sacramental (Pílulas), Frei Galvão demonstra sua compaixão pelos enfermos; objeto devocional de fé, é representado por um papelzinho, dobrado em forma de pílula e com uma frase em honra à Imaculada Conceição:</p>
+                            <blockquote class="border-l-4 border-franciscan pl-4 italic text-gray-600 font-serif bg-gray-50 p-4 rounded-r-lg shadow-inner">
+                                "Depois do parto, ó Virgem, permaneceste intacta. Mãe de Deus, intercede por nós".
+                            </blockquote>
+                            <div class="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm font-semibold flex items-start gap-3">
+                                <i class="fa-solid fa-triangle-exclamation mt-1"></i>
+                                <p>As Pílulas de Frei Galvão não são remédios químicos, mas Pílulas Devocionais que não dispensam a ida ao médico!</p>
+                            </div>`,
+                titlePrayer: "Oração da Novena",
+                textPrayer: `<p>Deus de amor, fonte de todas as luzes, que cumulastes de bênçãos o vosso Santo Antônio de Sant'Anna Galvão, nós vos adoramos, glorificamos e vos agradecemos, porque nele fizestes maravilhas.</p>
+                             <p>Ele, Senhor, por vossa inspiração, criou para o vosso povo sofrido esta Pílula, sinal da compaixão para com os enfermos e sinal seguro da mediação da Virgem Maria Imaculada.</p>
+                             <p>Alcançai-nos, pela intercessão de Vossa Mãe e de Santo Antônio de Sant'Anna Galvão, que nós, ao tomarmos com fé e devoção estas pílulas, consigamos a graça desejada <strong>(pedir a graça)</strong>.</p>
+                             <p>Ó Santo Antônio de Sant'Anna Galvão, junto à Maria, Mãe de Deus, rogai por nós, para que obtenhamos do Pai Celeste a vida plena no amor do Espírito Santo. Amém!</p>`,
+                titleReceive: `<i class="fa-solid fa-envelope-open-text text-franciscan"></i> Para receber as Pílulas`,
+                textReceive: `<p>Envie-nos uma carta contendo dentro um envelope selado com a carta comercial 1º porte, que enviaremos de volta com as Pílulas.</p>
+                              <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 mt-4">
+                                  <p class="font-bold text-franciscan-dark">Seminário Franciscano Frei Galvão</p>
+                                  <p>Av. Integração, 151<br>Vila São José<br>Guaratinguetá/SP – CEP 12522-030</p>
+                              </div>
+                              <p class="text-red-600 font-bold mt-4 uppercase text-sm"><i class="fa-solid fa-ban mr-1"></i> Proibida a venda das Pílulas Devocionais.</p>`,
+                titleDonate: `<i class="fa-solid fa-hand-holding-dollar"></i> Ajude-nos`,
+                textDonate: `Envie sua contribuição espontânea e ajude na formação dos futuros franciscanos e no acolhimento aos devotos de Frei Galvão!`,
+                timelineMainTitle: "Cronologia de Vida e Obra",
+                timelineSubtitle: "Os principais marcos da história do primeiro santo brasileiro, desde o seu nascimento até a Canonização.",
+                miracleTag: "O Milagre",
+                miracleMainTitle: "O Milagre da Canonização",
+                miracleSubtitle: "O relato surpreendente e cientificamente inexplicável que elevou Frei Galvão aos altares.",
+                miracleContent: `<p>Entre <strong>1993 e 1994</strong>, Sandra Grossi de Almeida, de São Paulo (Capital), sofreu três abortos espontâneos devido ao "útero bicorne": um útero com cavidades de dimensões muito pequenas e assimétricas. Esta malformação, que não pode ser corrigida cirurgicamente, impossibilitava levar qualquer gravidez ao seu final, pois o feto não tinha espaço suficiente para crescimento e formação.</p>
+                                <p>Em <strong>maio de 1999</strong>, Sandra ficou novamente grávida. Em agosto, a sua ginecologista fez uma "cerclagem cervical" preventiva, numa tentativa de evitar um novo aborto, já que a gravidez era de altíssimo risco. Sandra estava consciente de que um novo aborto, um parto prematuro ou uma forte hemorragia poderiam levá-la à morte. Os médicos aconselharam-na a interromper a gravidez ou, no máximo, levá-la apenas até o quinto mês, quando o bebê seria retirado prematuramente.</p>
+                                <blockquote class="border-l-4 border-franciscan pl-6 italic text-gray-600 font-serif bg-franciscan-bg p-6 rounded-r-lg my-8">
+                                    Entretanto, mesmo diante de um quadro tão grave, Sandra não desistiu. Durante toda a gravidez, ela e sua família invocaram Frei Galvão, com muitas orações e novenas contínuas.
+                                </blockquote>
+                                <p>Autorizada pelos médicos, ela tomou as <strong>"Pílulas de Frei Galvão"</strong>, com muita fé e a certeza de que o então "homem da Paz e da Caridade" iria interceder por ela e permitir o nascimento desse filho tão almejado.</p>
+                                <p>A gestação evoluiu normalmente até a trigésima segunda semana. Por ser de altíssimo risco, a parturiente fez repouso absoluto durante os meses seguintes, sendo inclusive internada para acompanhamento diário. No dia <strong>11/12/1999</strong>, com a ruptura da bolsa, os médicos optaram pelo parto por cesariana, que ocorreu sem nenhuma complicação.</p>
+                                <div class="bg-green-50 border border-green-200 p-6 rounded-xl my-6">
+                                    <h4 class="text-green-800 font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-heart-pulse"></i> Um fato inexplicável</h4>
+                                    <p class="text-green-900 m-0">Assim, com quase dois quilos e 42 centímetros, nasceu Enzo de Almeida Galafassi. Embora tenha apresentado um gravíssimo caso de deficiência respiratória, precisando ficar entubado por cerca de 24 horas, recebeu alta no dia <strong>19/12/1999</strong>.</p>
+                                </div>
+                                <p>O fato desta gestação (de alto risco e sem esperança por parte dos médicos) ter chegado ao final com sucesso foi atribuído à intercessão de Santo Antônio de Sant'Anna Galvão. Tido como um fato cientificamente inexplicável no seu conjunto, segundo os atuais conhecimentos, foi considerado como <strong>miraculoso, por unanimidade</strong>, pelo "Congresso de Teólogos".</p>
+                                <p>No dia <strong>16/12/2006</strong>, o Papa Bento XVI autorizou a Congregação das Causas dos Santos a promulgar o Decreto a respeito do milagre. Atualmente, Sandra e Enzo residem em Brasília, DF.</p>`,
+                linkVatican: `Frei Galvão no Vaticano`,
+                linkOFM: `Ordem dos Frades Menores (OFM)`,
+                linkProvince: `Província da Imaculada Conceição`,
+                pazEBem: `Paz e Bem!`,
+                footerLinksTitle: `Links Oficiais`,
+                footerSanctuaryTitle: `Santuário de Frei Galvão`,
+                footerAddress: `Av. José Pereira da Cruz, 53<br>Jardim do Vale<br>Guaratinguetá/SP - 12519-411`,
+                footerDev: `Desenvolvido com <i class="fa-solid fa-heart text-franciscan mx-1"></i> e devoção`,
+                footerText: `Seminário Franciscano Frei Galvão &copy; 2026`
+            },
+            en: {
+                tabHome: "Home",
+                tabTimeline: "Timeline",
+                tabMiracle: "Miracle",
+                menuNavTitle: "Navigation Menu",
+                menuLangTitle: "Language",
+                menuCloseBtn: '<i class="fa-solid fa-chevron-up mr-2"></i> Close Menu',
+                heroTitle: "Saint Anthony of Saint Ann Galvão",
+                heroSubtitle: "“Tenderness-Sweetness of God”",
+                tagModel: "Model of Life",
+                titleModel: "Saint of Peace and Charity",
+                subtitleModel: "Patron Saint of Civil Construction",
+                textModel: `<p>Friar Galvão was a great devotee of the Blessed Virgin Mary, to whom he consecrated himself at 27 years of age, signing the consecration document with his own blood.</p>
+                            <p>The first Brazilian saint belonged to the Franciscan Province of the Immaculate Conception of Brazil, the same group of friars as the Friar Galvão Franciscan Seminary.</p>`,
+                titlePills: "Devotional Pills",
+                textPills: `<p>Inspired by the acts of love and charity of Saint Anthony of Saint Ann Galvão, especially towards the sick, we continue the production and distribution of the Devotional Pills to people who come to us in times of distress.</p>
+                            <p>Through this sacramental (Pills), Friar Galvão demonstrates his compassion for the sick; a devotional object of faith, it is represented by a small piece of paper, folded in the shape of a pill, with a phrase in honor of the Immaculate Conception:</p>
+                            <blockquote class="border-l-4 border-franciscan pl-4 italic text-gray-600 font-serif bg-gray-50 p-4 rounded-r-lg shadow-inner">
+                                "After childbirth, O Virgin, you remained intact. Mother of God, intercede for us."
+                            </blockquote>
+                            <div class="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm font-semibold flex items-start gap-3">
+                                <i class="fa-solid fa-triangle-exclamation mt-1"></i>
+                                <p>Friar Galvão's Pills are not chemical medicines, but Devotional Pills that do not exempt you from going to the doctor!</p>
+                            </div>`,
+                titlePrayer: "Prayer of the Novena",
+                textPrayer: `<p>God of love, source of all light, who showered your Saint Anthony of Saint Ann Galvão with blessings, we adore you, glorify you, and thank you, because you worked wonders in him.</p>
+                             <p>He, Lord, by your inspiration, created for your suffering people this Pill, a sign of compassion for the sick and a sure sign of the mediation of the Immaculate Virgin Mary.</p>
+                             <p>Grant us, through the intercession of Your Mother and Saint Anthony of Saint Ann Galvão, that we, by taking these pills with faith and devotion, may obtain the desired grace <strong>(ask for the grace)</strong>.</p>
+                             <p>O Saint Anthony of Saint Ann Galvão, together with Mary, Mother of God, pray for us, so that we may obtain from the Heavenly Father full life in the love of the Holy Spirit. Amen!</p>`,
+                titleReceive: `<i class="fa-solid fa-envelope-open-text text-franciscan"></i> To receive the Pills`,
+                textReceive: `<p>Send us a letter containing a self-addressed stamped envelope (1st class commercial letter postage), which we will send back with the Pills.</p>
+                              <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 mt-4">
+                                  <p class="font-bold text-franciscan-dark">Seminário Franciscano Frei Galvão</p>
+                                  <p>Av. Integração, 151<br>Vila São José<br>Guaratinguetá/SP – ZIP Code 12522-030<br>Brazil</p>
+                              </div>
+                              <p class="text-red-600 font-bold mt-4 uppercase text-sm"><i class="fa-solid fa-ban mr-1"></i> The sale of Devotional Pills is prohibited.</p>`,
+                titleDonate: `<i class="fa-solid fa-hand-holding-dollar"></i> Help Us`,
+                textDonate: `Send your spontaneous contribution and help in the formation of future Franciscans and in welcoming the devotees of Friar Galvão!`,
+                timelineMainTitle: "Timeline of Life and Work",
+                timelineSubtitle: "The main milestones in the history of the first Brazilian saint, from his birth to Canonization.",
+                miracleTag: "The Miracle",
+                miracleMainTitle: "The Canonization Miracle",
+                miracleSubtitle: "The surprising and scientifically inexplicable account that raised Friar Galvão to the altars.",
+                miracleContent: `<p>Between <strong>1993 and 1994</strong>, Sandra Grossi de Almeida, from São Paulo, suffered three miscarriages due to a "bicornuate uterus": a uterus with very small and asymmetrical cavities. This malformation, which cannot be surgically corrected, made it impossible to carry any pregnancy to term, as the fetus did not have enough space for growth and formation.</p>
+                                <p>In <strong>May 1999</strong>, Sandra became pregnant again. In August, her gynecologist performed a preventive "cervical cerclage" in an attempt to avoid another miscarriage, since the pregnancy was of extremely high risk. Sandra was aware that a new miscarriage, a premature birth, or a severe hemorrhage could lead to her death. Doctors advised her to terminate the pregnancy or, at most, carry it only until the fifth month, when the baby would be prematurely removed.</p>
+                                <blockquote class="border-l-4 border-franciscan pl-6 italic text-gray-600 font-serif bg-franciscan-bg p-6 rounded-r-lg my-8">
+                                    However, even faced with such a severe situation, Sandra did not give up. Throughout the pregnancy, she and her family invoked Friar Galvão with many continuous prayers and novenas.
+                                </blockquote>
+                                <p>Authorized by the doctors, she took <strong>"Friar Galvão's Pills"</strong> with great faith and certainty that the then "man of Peace and Charity" would intercede for her and allow the birth of this much-desired child.</p>
+                                <p>The gestation progressed normally until the thirty-second week. Being of extremely high risk, the expectant mother rested absolutely during the following months, even being hospitalized for daily monitoring. On <strong>12/11/1999</strong>, with her water breaking, the doctors opted for a C-section delivery, which occurred without any complications.</p>
+                                <div class="bg-green-50 border border-green-200 p-6 rounded-xl my-6">
+                                    <h4 class="text-green-800 font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-heart-pulse"></i> An Inexplicable Event</h4>
+                                    <p class="text-green-900 m-0">Thus, weighing almost two kilograms and 42 centimeters long, Enzo de Almeida Galafassi was born. Although he presented a very severe case of respiratory deficiency, needing to be intubated for about 24 hours, he was discharged on <strong>12/19/1999</strong>.</p>
+                                </div>
+                                <p>The fact that this pregnancy (high risk and without hope from the doctors) reached a successful conclusion was attributed to the intercession of Saint Anthony of Saint Ann Galvão. Considered a scientifically inexplicable event as a whole, according to current knowledge, it was deemed <strong>miraculous, unanimously</strong>, by the "Congress of Theologians".</p>
+                                <p>On <strong>12/16/2006</strong>, Pope Benedict XVI authorized the Congregation for the Causes of Saints to promulgate the Decree regarding the miracle. Currently, Sandra and Enzo reside in Brasília, DF.</p>`,
+                linkVatican: `Friar Galvão at the Vatican`,
+                linkOFM: `Order of Friars Minor (OFM)`,
+                linkProvince: `Immaculate Conception Province`,
+                pazEBem: `Peace and All Good!`,
+                footerLinksTitle: `Official Links`,
+                footerSanctuaryTitle: `Sanctuary of Friar Galvão`,
+                footerAddress: `Av. José Pereira da Cruz, 53<br>Jardim do Vale<br>Guaratinguetá/SP - 12519-411<br>Brazil`,
+                footerDev: `Developed with <i class="fa-solid fa-heart text-franciscan mx-1"></i> and devotion`,
+                footerText: `Friar Galvão Franciscan Seminary &copy; 2026`
+            },
+            it: {
+                tabHome: "Inizio",
+                tabTimeline: "Cronologia",
+                tabMiracle: "Miracolo",
+                menuNavTitle: "Menu di Navigazione",
+                menuLangTitle: "Lingua",
+                menuCloseBtn: '<i class="fa-solid fa-chevron-up mr-2"></i> Chiudi Menu',
+                heroTitle: "Sant'Antonio di Sant'Anna Galvão",
+                heroSubtitle: "“Tenerezza-Dolcezza di Dio”",
+                tagModel: "Modello di Vita",
+                titleModel: "Santo della Pace e della Carità",
+                subtitleModel: "Patrono dell'Edilizia",
+                textModel: `<p>Fra Galvão è stato un grande devoto di Maria Santissima, a cui si è consacrato all'età di 27 anni, firmando il documento di consacrazione con il proprio sangue.</p>
+                            <p>Il primo santo brasiliano è appartenuto alla Provincia Francescana dell'Immacolata Concezione del Brasile, lo stesso gruppo di frati del Seminario Francescano Frei Galvão.</p>`,
+                titlePills: "Pillole Devozionali",
+                textPills: `<p>Ispirati dagli atti di amore e carità di Sant'Antonio di Sant'Anna Galvão, soprattutto verso i malati, continuiamo la produzione e la distribuzione delle Pillole Devozionali alle persone che ci cercano in momenti di afflizione.</p>
+                            <p>Attraverso questo sacramentale (Pillole), Fra Galvão dimostra la sua compassione per gli infermi; oggetto devozionale di fede, è rappresentato da un pezzetto di carta, piegato a forma di pillola e con una frase in onore all'Immacolata Concezione:</p>
+                            <blockquote class="border-l-4 border-franciscan pl-4 italic text-gray-600 font-serif bg-gray-50 p-4 rounded-r-lg shadow-inner">
+                                "Dopo il parto, o Vergine, sei rimasta intatta. Madre di Dio, intercedi per noi".
+                            </blockquote>
+                            <div class="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm font-semibold flex items-start gap-3">
+                                <i class="fa-solid fa-triangle-exclamation mt-1"></i>
+                                <p>Le Pillole di Frei Galvão non sono medicine chimiche, ma Pillole Devozionali che non esentano dall'andare dal medico!</p>
+                            </div>`,
+                titlePrayer: "Preghiera della Novena",
+                textPrayer: `<p>Dio di amore, fonte di tutte le luci, che hai colmato di benedizioni il tuo Sant'Antonio di Sant'Anna Galvão, noi ti adoriamo, ti glorifichiamo e ti ringraziamo, perché in lui hai fatto meraviglie.</p>
+                             <p>Egli, Signore, per tua ispirazione, ha creato per il tuo popolo sofferente questa Pillola, segno di compassione per gli infermi e segno sicuro della mediazione della Vergine Maria Immacolata.</p>
+                             <p>Ottienici, per intercessione di Tua Madre e di Sant'Antonio di Sant'Anna Galvão, che noi, prendendo con fede e devozione queste pillole, possiamo ottenere la grazia desiderata <strong>(chiedere la grazia)</strong>.</p>
+                             <p>O Sant'Antonio di Sant'Anna Galvão, insieme a Maria, Madre di Dio, prega per noi, affinché possiamo ottenere dal Padre Celeste la vita piena nell'amore dello Spirito Santo. Amen!</p>`,
+                titleReceive: `<i class="fa-solid fa-envelope-open-text text-franciscan"></i> Per ricevere le Pillole`,
+                textReceive: `<p>Inviateci una lettera contenente all'interno una busta preaffrancata (porto per lettera commerciale di 1ª classe), che vi rispediremo con le Pillole.</p>
+                              <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 mt-4">
+                                  <p class="font-bold text-franciscan-dark">Seminario Francescano Frei Galvão</p>
+                                  <p>Av. Integração, 151<br>Vila São José<br>Guaratinguetá/SP – CAP 12522-030<br>Brasile</p>
+                              </div>
+                              <p class="text-red-600 font-bold mt-4 uppercase text-sm"><i class="fa-solid fa-ban mr-1"></i> È vietata la vendita delle Pillole Devozionali.</p>`,
+                titleDonate: `<i class="fa-solid fa-hand-holding-dollar"></i> Aiutaci`,
+                textDonate: `Invia il tuo contributo spontaneo e aiuta nella formazione dei futuri francescani e nell'accoglienza dei devoti di Frei Galvão!`,
+                timelineMainTitle: "Cronologia di Vita e Opere",
+                timelineSubtitle: "Le principali tappe della storia del primo santo brasiliano, dalla nascita alla Canonizzazione.",
+                miracleTag: "Il Miracolo",
+                miracleMainTitle: "Il Miracolo della Canonizzazione",
+                miracleSubtitle: "Il resoconto sorprendente e scientificamente inspiegabile che innalzò Fra Galvão agli altari.",
+                miracleContent: `<p>Tra il <strong>1993 e il 1994</strong>, Sandra Grossi de Almeida, di San Paolo, subì tre aborti spontanei a causa dell'"utero bicorne": un utero con cavità di dimensioni molto piccole e asimmetriche. Questa malformazione, non correggibile chirurgicamente, rendeva impossibile portare a termine qualsiasi gravidanza, in quanto il feto non aveva spazio sufficiente per crescere e formarsi.</p>
+                                <p>Nel <strong>maggio 1999</strong>, Sandra rimase di nuovo incinta. In agosto, la sua ginecologa effettuò un "cerchiaggio cervicale" preventivo nel tentativo di evitare un nuovo aborto, dato che la gravidanza era ad altissimo rischio. Sandra era consapevole che un nuovo aborto, un parto prematuro o una forte emorragia avrebbero potuto condurla alla morte. I medici le consigliarono di interrompere la gravidanza o, al massimo, di portarla avanti solo fino al quinto mese, quando il bambino sarebbe stato estratto prematuramente.</p>
+                                <blockquote class="border-l-4 border-franciscan pl-6 italic text-gray-600 font-serif bg-franciscan-bg p-6 rounded-r-lg my-8">
+                                    Tuttavia, pur di fronte a un quadro così grave, Sandra non si arrese. Durante tutta la gravidanza, lei e la sua famiglia invocarono Fra Galvão con molte preghiere e novene continue.
+                                </blockquote>
+                                <p>Autorizzata dai medici, assunse le <strong>"Pillole di Fra Galvão"</strong> con molta fede e la certeza che l'allora "uomo di Pace e Carità" avrebbe interceduto per lei e permesso la nascita di questo figlio tanto desiderato.</p>
+                                <p>La gestazione procedette normalmente fino alla trentaduesima settimana. Essendo ad altissimo rischio, la partoriente osservò il riposo assoluto nei mesi successivi, venendo anche ricoverata per un monitoraggio giornaliero. L'<strong>11/12/1999</strong>, con la rottura delle acque, i medici optarono per il parto cesareo, che si svolse senza complicazioni.</p>
+                                <div class="bg-green-50 border border-green-200 p-6 rounded-xl my-6">
+                                    <h4 class="text-green-800 font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-heart-pulse"></i> Un Fatto Inspiegabile</h4>
+                                    <p class="text-green-900 m-0">Nacque così, con quasi due chili e 42 centimetri, Enzo de Almeida Galafassi. Sebbene presentasse un gravissimo caso di insufficienza respiratoria, necessitando di essere intubato per circa 24 hours, fu dimesso il <strong>19/12/1999</strong>.</p>
+                                </div>
+                                <p>Il fatto che questa gravidanza (ad alto rischio e senza speranza da parte dei medici) fosse giunta a buon fine con successo fu attribuito all'intercessione di Sant'Antonio di Sant'Anna Galvão. Ritenuto un fatto scientificamente inspiegabile nel suo complesso, secondo le attuali conoscenze, fu considerato <strong>miracoloso, all'unanimità</strong>, dal "Congresso dei Teologi".</p>
+                                <p>Il <strong>16/12/2006</strong>, Papa Benedetto XVI autorizzò la Congregazione delle Cause dei Santi a promulgare il Decreto riguardante il miracolo. Attualmente, Sandra ed Enzo risiedono a Brasilia, DF.</p>`,
+                linkVatican: `Fra Galvão in Vaticano`,
+                linkOFM: `Ordine dei Frati Minori (OFM)`,
+                linkProvince: `Provincia dell'Immacolata Concezione`,
+                pazEBem: `Pace e Bene!`,
+                footerLinksTitle: `Link Ufficiali`,
+                footerSanctuaryTitle: `Santuario di Fra Galvão`,
+                footerAddress: `Av. José Pereira da Cruz, 53<br>Jardim do Vale<br>Guaratinguetá/SP - 12519-411<br>Brasile`,
+                footerDev: `Sviluppato con <i class="fa-solid fa-heart text-franciscan mx-1"></i> e devozione`,
+                footerText: `Seminario Francescano Frei Galvão &copy; 2026`
+            },
+            es: {
+                tabHome: "Inicio",
+                tabTimeline: "Cronología",
+                tabMiracle: "Milagro",
+                menuNavTitle: "Menú de Navegación",
+                menuLangTitle: "Idioma",
+                menuCloseBtn: '<i class="fa-solid fa-chevron-up mr-2"></i> Cerrar Menú',
+                heroTitle: "San Antonio de Santa Ana Galvão",
+                heroSubtitle: "“Ternura-Dulzura de Dios”",
+                tagModel: "Modelo de Vida",
+                titleModel: "Santo de la Paz y de la Caridad",
+                subtitleModel: "Patrono de la Construcción Civil",
+                textModel: `<p>Fray Galvão fue un gran devoto de María Santísima, a quien se consagró a los 27 años de edad, firmando con su propia sangre el documento de consagración.</p>
+                            <p>El primer santo brasileño perteneció a la Provincia Franciscana de la Inmaculada Concepción de Brasil, el mismo grupo de frailes del Seminario Franciscano Fray Galvão.</p>`,
+                titlePills: "Píldoras Devocionales",
+                textPills: `<p>Inspirados por los actos de amor y caridad de San Antonio de Santa Ana Galvão, sobre todo para con los enfermos, damos continuación a la producción y distribución de las Píldoras Devocionales a las personas que nos buscan en momentos de aflicción.</p>
+                            <p>Por medio de este sacramental (Píldoras), Fray Galvão demuestra su compasión por los enfermos; objeto devocional de fe, está representado por un papelito, doblado en forma de píldora y con una frase en honor a la Inmaculada Concepción:</p>
+                            <blockquote class="border-l-4 border-franciscan pl-4 italic text-gray-600 font-serif bg-gray-50 p-4 rounded-r-lg shadow-inner">
+                                "Después del parto, oh Virgen, permaneciste intacta. Madre de Dios, intercede por nosotros".
+                            </blockquote>
+                            <div class="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm font-semibold flex items-start gap-3">
+                                <i class="fa-solid fa-triangle-exclamation mt-1"></i>
+                                <p>¡Las Píldoras de Fray Galvão no son remedios químicos, sino Píldoras Devocionales que no eximen de la visita al médico!</p>
+                            </div>`,
+                titlePrayer: "Oración de la Novena",
+                textPrayer: `<p>Dios de amor, fuente de todas las luces, que colmasteis de bendiciones a vuestro San Antonio de Santa Ana Galvão, nosotros os adoramos, glorificamos y os agradecemos, porque en él hicisteis maravillas.</p>
+                             <p>Él, Señor, por vuestra inspiración, creó para vuestro pueblo sufrido esta Píldora, signo de compasión para con los enfermos y signo seguro de la mediación de la Virgen María Inmacolata.</p>
+                             <p>Alcanzadnos, por la intercesión de Vuestra Madre y de San Antonio de Santa Ana Galvão, que nosotros, al tomar con fe y devoción estas píldoras, consigamos la gracia deseada <strong>(pedir la gracia)</strong>.</p>
+                             <p>Oh San Antonio de Santa Ana Galvão, junto a María, Madre de Dios, rogad por nosotros, para que obtengamos del Padre Celestial la vida plena en el amor del Espíritu Santo. ¡Amén!</p>`,
+                titleReceive: `<i class="fa-solid fa-envelope-open-text text-franciscan"></i> Para recibir las Píldoras`,
+                textReceive: `<p>Envíenos una carta que contenga en su interior un sobre debidamente franqueado (sello postal de carta comercial de 1º porte), que le enviaremos de vuelta con las Píldoras.</p>
+                              <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 mt-4">
+                                  <p class="font-bold text-franciscan-dark">Seminario Franciscano Fray Galvão</p>
+                                  <p>Av. Integração, 151<br>Vila São José<br>Guaratinguetá/SP – CEP 12522-030<br>Brasil</p>
+                              </div>
+                              <p class="text-red-600 font-bold mt-4 uppercase text-sm"><i class="fa-solid fa-ban mr-1"></i> Prohibida la venta de las Píldoras Devocionales.</p>`,
+                titleDonate: `<i class="fa-solid fa-hand-holding-dollar"></i> Ayúdanos`,
+                textDonate: `¡Envíe su contribución espontánea y ayude en la formación de los futuros franciscanos y en la acogida a los devotos de Fray Galvão!`,
+                timelineMainTitle: "Cronología de Vida y Obra",
+                timelineSubtitle: "Los principales hitos en la historia del primer santo brasileño, desde su nacimiento hasta la Canonización.",
+                miracleTag: "El Milagro",
+                miracleMainTitle: "El Milagro de la Canonización",
+                miracleSubtitle: "El relato sorprendente y científicamente inexplicable que elevó a Fray Galvão a los altares.",
+                miracleContent: `<p>Entre <strong>1993 y 1994</strong>, Sandra Grossi de Almeida, de São Paulo, sufrió tres abortos espontáneos debido al "útero bicorne": un útero con cavidades de dimensiones muy pequeñas y asimétricas. Esta malformación, que no puede ser corregida quirúrgicamente, imposibilitaba llevar cualquier embarazo a término, ya que el feto no tenía espacio suficiente para el crecimiento y formación.</p>
+                                <p>En <strong>mayo de 1999</strong>, Sandra quedó nuevamente embarazada. En agosto, su ginecóloga realizó un "cerclaje cervical" preventivo en un intento de evitar un nuevo aborto, ya que el embarazo era de altísimo riesgo. Sandra era consciente de que un nuevo aborto, un parto prematuro o una fuerte hemorragia podrían llevarla a la muerte. Los médicos le aconsejaron interrumpir el embarazo o, como máximo, llevarlo solo hasta el quinto mes, cuando el bebé sería extraído prematuramente.</p>
+                                <blockquote class="border-l-4 border-franciscan pl-6 italic text-gray-600 font-serif bg-franciscan-bg p-6 rounded-r-lg my-8">
+                                    Sin embargo, incluso ante un cuadro tan grave, Sandra no se rindió. Durante todo el embarazo, ella y su familia invocaron a Fray Galvão, con muchas oraciones y novenas continuas.
+                                </blockquote>
+                                <p>Autorizada por los médicos, tomó las <strong>"Píldoras de Fray Galvão"</strong>, con mucha fe y la certeza de que el entonces "hombre de Paz y Caridad" intercedería por ella y permitiría el nacimiento de ese hijo tan anhelado.</p>
+                                <p>La gestación evolucionó normalmente hasta la trigésima segunda semana. Por ser de altísimo riesgo, la parturienta hizo reposo absoluto durante los meses siguientes, siendo incluso internada para seguimiento diario. El <strong>11/12/1999</strong>, con la ruptura de la bolsa, los médicos optaron por el parto por cesárea, que ocurrió sin ninguna complicación.</p>
+                                <div class="bg-green-50 border border-green-200 p-6 rounded-xl my-6">
+                                    <h4 class="text-green-800 font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-heart-pulse"></i> Un Hecho Inexplicable</h4>
+                                    <p class="text-green-900 m-0">Así, con casi dos kilos y 42 centímetros, nació Enzo de Almeida Galafassi. Aunque presentó un gravísimo caso de deficiencia respiratoria, necesitando estar intubado por cerca de 24 horas, recibió el alta el <strong>19/12/1999</strong>.</p>
+                                </div>
+                                <p>El hecho de que esta gestación (de alto riesgo y sin esperanza por parte de los médicos) llegara al final con éxito fue atribuido a la intercesión de San Antonio de Santa Ana Galvão. Tenido como un hecho científicamente inexplicable en su conjunto, según los actuales conocimientos, fue considerado como <strong>milagroso, por unanimidad</strong>, por el "Congreso de Teólogos".</p>
+                                <p>El <strong>16/12/2006</strong>, el Papa Benedicto XVI autorizó a la Congregación de las Causas de los Santos a promulgar el Decreto sobre el milagro. Actualmente, Sandra y Enzo residem en Brasilia, DF.</p>`,
+                linkVatican: `Fray Galvão en el Vaticano`,
+                linkOFM: `Orden de los Frailes Menores (OFM)`,
+                linkProvince: `Provincia de la Inmaculada Concepción`,
+                pazEBem: `¡Paz y Bien!`,
+                footerLinksTitle: `Enlaces Oficiales`,
+                footerSanctuaryTitle: `Santuario de Fray Galvão`,
+                footerAddress: `Av. José Pereira da Cruz, 53<br>Jardim do Vale<br>Guaratinguetá/SP - 12519-411<br>Brasil`,
+                footerDev: `Desarrollado con <i class="fa-solid fa-heart text-franciscan mx-1"></i> y devoción`,
+                footerText: `Seminario Franciscano Fray Galvão &copy; 2026`
+            }
+        };
+
+        // FUNÇÃO DE TROCA DE ABA (SPA)
+        function switchView(viewName) {
+            currentView = viewName;
+            
+            // Controle visual dos botões
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                if (tab.dataset.type === 'desktop') {
+                    tab.classList.remove('active', 'text-franciscan-dark');
+                } else {
+                    tab.classList.remove('active', 'text-franciscan-dark', 'bg-franciscan-light/20', 'border-franciscan', 'font-bold');
+                    tab.classList.add('border-transparent', 'text-gray-500');
+                }
+            });
+            
+            document.querySelectorAll(`.nav-tab-${viewName}`).forEach(activeTab => {
+                if (activeTab.dataset.type === 'desktop') {
+                    activeTab.classList.add('active', 'text-franciscan-dark');
+                } else {
+                    activeTab.classList.add('active', 'text-franciscan-dark', 'bg-franciscan-light/20', 'border-franciscan', 'font-bold');
+                    activeTab.classList.remove('border-transparent', 'text-gray-500');
+                }
+            });
+            
+            // Esconder todas as views primeiro
+            ['home', 'timeline', 'miracle'].forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                if (el) el.classList.add('hidden');
+            });
+            
+            // Mostrar a view selecionada
+            const selectedView = document.getElementById(`view-${viewName}`);
+            if (selectedView) {
+                selectedView.classList.remove('hidden');
+                
+                // Força a reinicialização da animação fade-in
+                selectedView.classList.remove('fade-in');
+                void selectedView.offsetWidth; 
+                selectedView.classList.add('fade-in');
+            }
+
+            // Rolar pro topo da main pra melhor experiência
+            if(window.scrollY > 300) {
+                window.scrollTo({ top: document.querySelector('main').offsetTop - 80, behavior: 'smooth' });
+            }
+        }
+
+        // FUNÇÃO PARA RENDERIZAR A CRONOLOGIA COM BASE NO IDIOMA
+        function renderTimeline() {
+            const container = document.getElementById('timeline-render-container');
+            
+            let html = `<div class="timeline-container md:overflow-x-auto pb-10">
+                            <div class="relative flex flex-col md:flex-row gap-0 md:gap-8 items-center md:items-start pt-10 px-4 md:px-12 w-full md:w-max mx-auto md:mx-0">
+                                <div class="hidden md:block absolute top-1/2 left-0 w-full h-[3px] bg-franciscan-light z-0 transform -translate-y-1/2"></div>`;
+
+            let globalEventIndex = 0; // Ajuda a alternar os cartões com perfeição no desktop
+
+            timelineData.forEach((section) => {
+                let catName = section.category[currentLang] || section.category['pt'];
+                
+                // --- CATEGORY MARKER (NOVO DESIGN) ---
+                html += `
+                    <div class="relative flex-shrink-0 w-full md:w-auto flex flex-col justify-center snap-center py-6 md:py-0 md:px-4 z-20">
+                        <!-- Conector Mobile Contínuo para a categoria -->
+                        <div class="block md:hidden absolute top-0 bottom-0 left-[23px] w-[3px] bg-franciscan-light z-0 transform -translate-x-1/2"></div>
+                        
+                        <div class="relative z-10 flex items-center pl-12 md:pl-0 md:justify-center md:h-[550px]">
+                            <!-- Badge da Categoria sobre a linha -->
+                            <div class="bg-franciscan text-white px-5 py-2 md:px-8 md:py-3 rounded-full font-serif font-bold text-sm md:text-lg shadow-xl border-4 border-[#F9F6F0] whitespace-nowrap flex items-center gap-2">
+                                <i class="fa-solid fa-cross text-white/70 text-xs md:text-sm"></i> ${catName}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // --- EVENT CARDS ---
+                section.events.forEach((ev) => {
+                    let evText = ev[currentLang] || ev['pt'];
+                    let isBottom = globalEventIndex % 2 === 0;
+                    
+                    html += `
+                        <div class="relative flex-shrink-0 w-full md:w-[380px] flex flex-col md:items-center text-left md:text-center snap-center pl-12 md:pl-0 pt-4 md:pt-0 pb-8 md:pb-0">
+                            
+                            <!-- Conector Mobile -->
+                            <div class="block md:hidden absolute top-0 bottom-0 left-[23px] w-[3px] bg-franciscan-light z-0 transform -translate-x-1/2"></div>
+                            
+                            <!-- Ponto na linha -->
+                            <div class="w-6 h-6 rounded-full bg-franciscan border-4 border-[#F9F6F0] shadow-sm absolute z-10 flex items-center justify-center left-[23px] top-10 transform -translate-x-1/2 md:left-1/2 md:top-1/2 md:-translate-y-1/2">
+                                <div class="w-2 h-2 bg-white rounded-full"></div>
+                            </div>
+                            
+                            <!-- Conteúdo (Cima ou Baixo no Desktop) -->
+                            <div class="bg-white border border-franciscan-light/60 p-6 rounded-xl shadow-md z-10 w-full 
+                                        md:absolute ${isBottom ? 'md:bottom-[calc(50%+3rem)]' : 'md:top-[calc(50%+3rem)]'}
+                                        hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                                
+                                <h3 class="text-2xl font-serif font-bold text-franciscan-dark mb-3">${ev.year}</h3>
+                                <p class="text-gray-700 text-sm leading-relaxed">${evText}</p>
+                            </div>
+
+                            <!-- Spacer para Desktop manter altura e evitar cortes -->
+                            <div class="hidden md:block h-[550px]"></div>
+                        </div>
+                    `;
+                    globalEventIndex++;
+                });
+            });
+
+            html += `</div></div>`;
+            container.innerHTML = html;
+        }
+
+        // FUNÇÃO DE TROCA DE IDIOMA
+        function changeLanguage(lang) {
+            currentLang = lang;
+
+            // Atualiza o visual dos botões
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if (btn.dataset.type === 'desktop') {
+                    btn.classList.remove('active', 'bg-franciscan', 'text-white', 'border-franciscan');
+                    btn.classList.add('hover:bg-gray-100', 'border-gray-300');
+                } else {
+                    btn.classList.remove('active', 'border-franciscan', 'bg-franciscan-light/20');
+                    btn.classList.add('hover:bg-gray-50', 'border-gray-200');
+                }
+            });
+            
+            document.querySelectorAll(`.lang-btn-${lang}`).forEach(activeBtn => {
+                if (activeBtn.dataset.type === 'desktop') {
+                    activeBtn.classList.add('active', 'bg-franciscan', 'text-white', 'border-franciscan');
+                    activeBtn.classList.remove('hover:bg-gray-100', 'border-gray-300');
+                } else {
+                    activeBtn.classList.add('active', 'border-franciscan', 'bg-franciscan-light/20');
+                    activeBtn.classList.remove('hover:bg-gray-50', 'border-gray-200');
+                }
+            });
+
+            // Troca o texto de todos os elementos com data-i18n
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                
+                if (translations[lang][key]) {
+                    // Adiciona uma classe de animação rápida para transição suave
+                    el.classList.remove('fade-in');
+                    void el.offsetWidth; // Força reflow
+                    el.classList.add('fade-in');
+                    
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            // Re-renderiza a cronologia com o novo idioma
+            renderTimeline();
+        }
+
+        // Inicia a aplicação processando o HTML inicial
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTimeline();
+        });
+
+    </script>
+</body>
+</html>
